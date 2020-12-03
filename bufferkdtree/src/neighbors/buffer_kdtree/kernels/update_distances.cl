@@ -84,7 +84,7 @@ __kernel void do_compute_final_distances_indices(
         return;
     }
 
-    dist_mins_global[tid] = sqrt(dist_mins_global[tid]);
+    //dist_mins_global[tid] = sqrt(dist_mins_global[tid]);
     //idx_mins_global[tid] = train_indices_sorted[idx_mins_global[tid]];
 
 }

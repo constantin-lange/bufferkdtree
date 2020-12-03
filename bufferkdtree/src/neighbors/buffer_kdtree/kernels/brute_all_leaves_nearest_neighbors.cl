@@ -106,15 +106,23 @@ __kernel void do_bruteforce_all_leaves_nearest_neighbors(
                                      train_patterns_sorted[train_idx_offset*DIM + j+1], 
                                      train_patterns_sorted[train_idx_offset*DIM + j+2], 
                                      train_patterns_sorted[train_idx_offset*DIM + j+3]);
-            tmp_vec = tmp_vec - test_patt_vec[j/VECSIZE];
-            dist_tmp_vec += tmp_vec*tmp_vec;
+            /*tmp_vec = tmp_vec - test_patt_vec[j/VECSIZE];
+            dist_tmp_vec += tmp_vec*tmp_vec;*/
+            tmp_vec = fabs(tmp_vec - test_patt_vec[j/VECSIZE]);
+
         }
 
         for (j=dim_mul_vecsize; j<DIM; j++){
-            tmp = (train_patterns_sorted[train_idx_offset*DIM + j] - test_patt_scalar[j-dim_mul_vecsize]);
-            dist_tmp += tmp*tmp;
+            /*tmp = (train_patterns_sorted[train_idx_offset*DIM + j] - test_patt_scalar[j-dim_mul_vecsize]);
+            dist_tmp += tmp*tmp;*/
+            tmp = fabs(train_patterns_sorted[train_idx_offset*DIM + j] - test_patt_scalar[j-dim_mul_vecsize]);
+            dist_tmp = max(dist_tmp, tmp);
         }
-        dist_tmp += dist_tmp_vec.s0 + dist_tmp_vec.s1 + dist_tmp_vec.s2 + dist_tmp_vec.s3;
+        //dist_tmp += dist_tmp_vec.s0 + dist_tmp_vec.s1 + dist_tmp_vec.s2 + dist_tmp_vec.s3;
+        dist_tmp = max(dist_tmp, dist_tmp_vec.s0);
+        dist_tmp = max(dist_tmp, dist_tmp_vec.s1);
+        dist_tmp = max(dist_tmp, dist_tmp_vec.s2);
+        dist_tmp = max(dist_tmp, dist_tmp_vec.s3);
 
         // insert distance and index
         j = K_NN - 1;	   

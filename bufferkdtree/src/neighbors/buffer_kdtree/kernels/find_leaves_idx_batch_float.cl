@@ -84,8 +84,8 @@ __kernel void find_leaf_idx_batch(
 
         if (status == 2){
             // if left child was visited first, we have to check the right side of the node
-            FLOAT_TYPE tmp = test_patt[axis] - nodes[idx_local].splitting_value;
-            if(tmp*tmp <= d_min[test_idx*NUM_NEIGHBORS + NUM_NEIGHBORS-1] ){
+            FLOAT_TYPE tmp = fabs(test_patt[axis] - nodes[idx_local].splitting_value);
+            if(tmp <= d_min[test_idx*NUM_NEIGHBORS + NUM_NEIGHBORS-1] ){
                 // the test instance is nearer to the median than to the nearest neighbors
                 // found so far: go right!
                 idx_local = 2*(idx_local)+2;
@@ -98,9 +98,9 @@ __kernel void find_leaf_idx_batch(
                 if(depth_local<0) {ret_vals[tid]=-1;break;}
             }
         } else if (status == 1){
-            FLOAT_TYPE tmp = test_patt[axis] - nodes[idx_local].splitting_value;
+            FLOAT_TYPE tmp = fabs(test_patt[axis] - nodes[idx_local].splitting_value);
             // if right child was visited first, we have to check the left side of the node
-            if( tmp*tmp <= d_min[test_idx*NUM_NEIGHBORS + NUM_NEIGHBORS-1]){                                        
+            if( tmp <= d_min[test_idx*NUM_NEIGHBORS + NUM_NEIGHBORS-1]){                                        
                 // the test instance is nearer to the median than to the nearest neighbors
                 // found so far: go left!
                 idx_local = 2*(idx_local)+1;

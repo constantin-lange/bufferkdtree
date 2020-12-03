@@ -425,7 +425,6 @@ void get_distances_and_indices_cpu(TREE_RECORD *tree_record,
 		TREE_PARAMETERS *params) {
 
 	INT_TYPE i, j;
-
 	for (i = 0; i < tree_record->nXtest; i++) {
 		for (j = 0; j < params->n_neighbors; j++) {
 			tree_record->idx_mins_global[i * params->n_neighbors + j] =
